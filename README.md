@@ -32,20 +32,26 @@ Open http://localhost:3000. With no credentials set, the hub runs on sample cont
 
 ### The Drive folder
 
-Make one folder for the hub, for example **Franchise Marketing Hub**. Its subfolders become the library categories, and anything nested inside them shows up as folders within that category. A starting layout:
+The hub shows the **[Marketing Hub](https://drive.google.com/drive/folders/1fkT35ANGDzNExE8VSyEvRu1QbE87loDG)** folder. Its subfolders are the library categories, and anything nested inside them shows up as folders within that category:
 
 ```
-Franchise Marketing Hub/
-  Logos & Brand/        logo lockups (PNG, SVG, EPS, AI), brand guide PDF
+Marketing Hub/
+  Logos & Brand/          logo lockups (PNG, SVG, EPS, AI)
     Fonts/
-  Job Photos/
-    Pergolas/  Motorized Screens/  Retractable Awnings/  Window Treatments/
-  Video/
-  Print/
-    Door Hangers/  Yard Signs/  Business Cards/  Vehicle Wrap/  Catalog/  Home Show/
-  Social Media/
-  Email Templates/
+  Photos/                 by product line
+    Louvered Pergolas/  Pergolas with Screens/  Motorized Screens/
+    Retractable Awnings/  Outdoor Kitchens/  Window Treatments/
+  Video/                  same product lines as Photos
+  Print/                  print-ready files
+    Door Hangers/  Yard Signs/  Business Cards/  Brochures & Catalogs/
+    Vehicle Wraps/  Home Shows & Events/
+  Social Media/           ready-to-post graphics and captions, by month
+  Templates/              editable files franchisees customize
+    Print Templates/  Social Media Templates/  Email Templates/  Presentations/
+  _Hub Settings           the settings sheet (hidden from the hub)
 ```
+
+To add something, drop it in the right folder. To add a new category, make a new folder at the top level.
 
 - **Folder descriptions show up in the hub.** In Drive, right-click a folder → *Folder information* → *Description*.
 - **Use shortcuts to add existing folders without moving them.** Right-click a folder elsewhere in Drive → *Organize* → *Add shortcut*, and put the shortcut in the hub folder. The service account needs access to the original folder too.
@@ -58,14 +64,14 @@ Keep internal material (sales call transcripts, CRM exports, reports) out of thi
 
 ### The settings sheet
 
-Create a Google Sheet with three tabs, named exactly as below. Row 1 of each tab is a header row.
+**[_Hub Settings](https://docs.google.com/spreadsheets/d/1w3fw_B5LXguyuGTK7LmwnROwxgsE3oSv-dOUkMRI9_4/edit)** lives inside the Marketing Hub folder. The underscore keeps it out of the library, and sharing the folder with the service account covers the sheet too. It has three tabs, each with a header row. Keep the tab names as they are.
 
 **Links**: shown on Order & shop. Rows with a section containing "order" or "shop" also appear on the home page (the first two).
 
 | Section | Title | Description | URL | Button label |
 |---|---|---|---|---|
-| Order & shop | Order print | Door hangers, yard signs, business cards… | https://… | Open the Vistaprint store |
-| Order & shop | Shop apparel | Polos, hats and jackets for your crew… | https://… | Open the merch store |
+| Order & shop | Order print | Door hangers, yard signs, business cards… | https://zingas.ourproshop.com | Open the print store |
+| Order & shop | Shop apparel | Branded apparel and merchandise… | https://zingas.istoremerch.com/index.jsf | Open the merch store |
 | Approved vendors | Vehicle wraps | … | https://… | Get a quote |
 | Get help | Request a design | Need something that isn't in the library? | https://forms.gle/… | Send a design request |
 
@@ -93,7 +99,7 @@ You need a Google Cloud project (free), and somewhere to host the app. These ste
 2. **APIs & Services → Library**: enable **Google Drive API** and **Google Sheets API**.
 3. **IAM & Admin → Service Accounts → Create service account**. Name it `marketing-hub`. No roles are needed.
 4. Open the service account → **Keys → Add key → JSON**. Keep the downloaded file safe, because it grants read access to whatever you share with it.
-5. Copy the service account's email (ends in `iam.gserviceaccount.com`). In Drive, **share the hub folder and the settings sheet with that email as Viewer**.
+5. Copy the service account's email (ends in `iam.gserviceaccount.com`). In Drive, **share the Marketing Hub folder with that email as Viewer**. The settings sheet is inside it, so it's covered.
 
 ### 2. Google Cloud: sign-in
 
@@ -112,13 +118,13 @@ A franchisee without a Google account can make one for their existing email at [
 
 | Variable | Value |
 |---|---|
-| `HUB_DRIVE_FOLDER_ID` | The ID from the hub folder's URL: `drive.google.com/drive/folders/THIS_PART` |
-| `HUB_SETTINGS_SHEET_ID` | The ID from the sheet's URL: `docs.google.com/spreadsheets/d/THIS_PART/edit` |
+| `HUB_DRIVE_FOLDER_ID` | `1fkT35ANGDzNExE8VSyEvRu1QbE87loDG` (the Marketing Hub folder) |
+| `HUB_SETTINGS_SHEET_ID` | `1w3fw_B5LXguyuGTK7LmwnROwxgsE3oSv-dOUkMRI9_4` (_Hub Settings) |
 | `GOOGLE_SERVICE_ACCOUNT_KEY` | Contents of the JSON key file. Base64 is safest: `base64 -i key.json \| tr -d '\n'` |
 | `AUTH_SECRET` | Output of `npx auth secret` or `openssl rand -base64 33` |
 | `AUTH_GOOGLE_ID` / `AUTH_GOOGLE_SECRET` | From step 2 |
 | `HUB_ALLOWED_DOMAINS` | `zingashome.com` |
-| `HUB_ADMIN_EMAILS` | Your email |
+| `HUB_ADMIN_EMAILS` | `braden@zingashome.com` |
 | `HUB_SUPPORT_EMAIL` | Where franchisees send questions |
 
 3. Deploy. To use your own address, like `hub.zingashome.com`, add it under **Settings → Domains**, then update the redirect URI in step 2.

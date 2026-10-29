@@ -71,7 +71,7 @@ export default async function BrandPage() {
 
       <section className="brand-section" aria-labelledby="type-heading">
         <h2 id="type-heading">Typography</h2>
-        <p>Headlines are always Essonnes. Everything else is Alfabet. The font files are in the Logos &amp; Brand folder. If you don&rsquo;t have them, Georgia and Arial are acceptable substitutes for documents.</p>
+        <p>Headlines are always Essonnes. Everything else is Alfabet. If you don&rsquo;t have the brand fonts installed, Georgia and Arial are acceptable substitutes for documents.</p>
         <dl className="type-specimens">
           <div className="specimen">
             <dt>
