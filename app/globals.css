@@ -159,6 +159,7 @@ p {
 }
 
 .main-nav a {
+  white-space: nowrap;
   text-decoration: none;
   font-size: 0.95rem;
   font-weight: 600;
@@ -1243,4 +1244,322 @@ p {
   padding: 10px 14px;
   background: var(--daylight);
   color: var(--deep-shade) !important;
+}
+
+/* ---- Social media: scripts and uploads -------------------------------------- */
+
+.social-toolbar {
+  align-items: center;
+}
+
+.location-picker {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+}
+
+.location-picker label {
+  color: var(--ink-soft);
+}
+
+.location-picker select {
+  font: inherit;
+  padding: 7px 10px;
+  border: 1.5px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--ink);
+}
+
+.location-picker .button {
+  padding: 6px 14px;
+}
+
+.folder-line {
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+  margin-bottom: 8px;
+}
+
+.folder-line a {
+  color: var(--gold-deep);
+  font-weight: 600;
+  text-underline-offset: 3px;
+}
+
+.scripts {
+  padding-bottom: 80px;
+}
+
+.script {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(300px, 1fr);
+  gap: clamp(28px, 4vw, 56px);
+  padding: 40px 0;
+  border-top: 2px solid var(--deep-shade);
+  scroll-margin-top: 90px;
+}
+
+.script + .script {
+  border-top-width: 1px;
+  border-top-color: var(--line);
+}
+
+.script-length {
+  margin-top: 6px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--gold-deep);
+}
+
+/* The lines to read on camera, set large like a page of script. */
+.script-text {
+  margin-top: 20px;
+  padding: 24px 28px;
+  background: var(--daylight);
+  border-radius: var(--radius-md);
+  font-family: var(--font-display);
+  font-size: 1.28rem;
+  line-height: 1.5;
+  max-width: 62ch;
+}
+
+.script-text p + p {
+  margin-top: 0.6em;
+}
+
+.script-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 16px 0 28px;
+}
+
+.script-copy h3,
+.upload-panel h3 {
+  font-family: var(--font-ui);
+  font-size: 1rem;
+  font-weight: 800;
+  margin-bottom: 10px;
+}
+
+.shot-list {
+  margin: 0;
+  padding-left: 1.15em;
+  max-width: 62ch;
+}
+
+.shot-list li {
+  margin-bottom: 6px;
+}
+
+.upload-panel {
+  align-self: start;
+  position: sticky;
+  top: 92px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  padding: 22px;
+  background: var(--surface);
+}
+
+.upload-panel .count {
+  font-weight: 600;
+  margin-left: 4px;
+}
+
+.dropzone {
+  border: 1.5px dashed var(--arch-gray);
+  border-radius: var(--radius-md);
+  padding: 22px 18px;
+  text-align: center;
+}
+
+.dropzone.dragging {
+  border-color: var(--gold);
+  background: var(--daylight);
+}
+
+.dropzone p {
+  margin-top: 10px;
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+}
+
+.dropzone:focus-within .button {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}
+
+@media (hover: none) {
+  .drop-hint {
+    display: none;
+  }
+}
+
+.upload-queue,
+.uploaded {
+  list-style: none;
+  margin: 16px 0 0;
+  padding: 0;
+}
+
+.upload-item {
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.upload-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 0.9rem;
+}
+
+.upload-name,
+.uploaded-name {
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.upload-status {
+  flex-shrink: 0;
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+.upload-item progress {
+  display: block;
+  width: 100%;
+  height: 6px;
+  margin-top: 8px;
+  border: 0;
+  border-radius: 3px;
+  overflow: hidden;
+  appearance: none;
+  background: var(--surface-sunk);
+  accent-color: var(--gold);
+}
+
+.upload-item progress::-webkit-progress-bar {
+  background: var(--surface-sunk);
+}
+
+.upload-item progress::-webkit-progress-value {
+  background: var(--gold);
+}
+
+.upload-item progress::-moz-progress-bar {
+  background: var(--gold);
+}
+
+.upload-item.done progress::-webkit-progress-value {
+  background: var(--patina);
+}
+
+.upload-item.done progress::-moz-progress-bar {
+  background: var(--patina);
+}
+
+.upload-error {
+  margin-top: 6px;
+  font-size: 0.85rem;
+  border-left: 3px solid var(--tungsten);
+  padding-left: 10px;
+}
+
+.upload-notice {
+  margin-top: 12px;
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+}
+
+.uploaded li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 2px 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 0.9rem;
+}
+
+.uploaded-meta {
+  grid-column: 1;
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+}
+
+.uploaded .link-button {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  align-self: center;
+}
+
+.uploaded-empty {
+  margin-top: 14px;
+  font-size: 0.9rem;
+}
+
+.link-button {
+  background: none;
+  border: 0;
+  padding: 0;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--gold-deep);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.upload-off p {
+  font-size: 0.9rem;
+}
+
+@media (max-width: 860px) {
+  .script {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .upload-panel {
+    position: static;
+  }
+  .script-text {
+    font-size: 1.15rem;
+    padding: 20px;
+  }
+}
+
+/* Home: this month's video scripts */
+.film-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 2px solid var(--deep-shade);
+}
+
+.film-list li a {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--line);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.film-list li a:hover {
+  text-decoration: underline;
+  text-decoration-color: var(--gold);
+  text-underline-offset: 4px;
+}
+
+.film-list span {
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+  flex-shrink: 0;
 }

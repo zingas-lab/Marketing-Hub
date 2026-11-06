@@ -2,6 +2,7 @@ import Link from "next/link";
 import { CategoryGrid } from "@/components/CategoryGrid";
 import { displayName, formatDate, isPhotographic } from "@/lib/assets";
 import { categories, getIndex, recentAssets } from "@/lib/drive";
+import { currentMonth, monthLabel } from "@/lib/months";
 import { firstName, requireViewer } from "@/lib/session";
 import { getSettings } from "@/lib/settings";
 
@@ -16,6 +17,8 @@ export default async function HomePage() {
   const cats = categories(index);
   const orderLinks = settings.links.filter((l) => /order|shop/i.test(l.section)).slice(0, 2);
   const recent = recentAssets(index, 6);
+  const month = currentMonth();
+  const monthScripts = settings.scripts.filter((s) => s.month === month);
   const quickSearches = ["logo", "door hanger", "pergola", "yard sign"];
 
   return (
@@ -64,6 +67,28 @@ export default async function HomePage() {
                   </div>
                 ))}
               </div>
+            </section>
+          )}
+
+          {monthScripts.length > 0 && (
+            <section className="section" aria-labelledby="film-heading">
+              <div className="section-head">
+                <h2 id="film-heading">Film this month</h2>
+                <Link href="/social">Scripts and uploads</Link>
+              </div>
+              <ul className="film-list">
+                {monthScripts.map((s) => (
+                  <li key={s.id}>
+                    <Link href={`/social?month=${month}#${s.id}`}>
+                      {s.title}
+                      {s.length ? <span>{s.length}</span> : null}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+              <p className="muted" style={{ marginTop: 10, fontSize: "0.9rem" }}>
+                {monthScripts.length} video {monthScripts.length === 1 ? "idea" : "ideas"} for {monthLabel(month)}.
+              </p>
             </section>
           )}
 

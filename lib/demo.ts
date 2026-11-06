@@ -1,6 +1,7 @@
 // Sample content for running the hub without Google credentials (HUB_DEMO=1).
 // The folders mirror the real "Marketing Hub" folder in Drive; the files are made up.
 import { extensionOf, kindOf } from "./assets";
+import { parseScripts } from "./scripts-parse";
 import type { Asset, Folder, HubIndex, HubSettings } from "./types";
 
 type Tree = { name: string; description?: string; files?: string[]; folders?: Tree[] };
@@ -141,6 +142,59 @@ function build(): HubIndex {
 
 export const demoIndex = build();
 
+/** Starter scripts, in the same shape as rows on the Scripts tab of the settings sheet. */
+export const SAMPLE_SCRIPT_ROWS: string[][] = [
+  [
+    "2026-11",
+    "Ready before the guests arrive",
+    "Thanksgiving's coming, and a lot of you will end up out on the patio.\nHere's what usually goes wrong. The afternoon sun lands on one end of the table, and by five the bugs find you.\nThis is a louvered pergola with motorized screens. The louvers angle for shade in the afternoon. The screens come down when the light drops.\nSame patio. Everyone stays outside.",
+    "Film vertical, with the phone steady or on a tripod.\nOpen on a wide shot of the patio, with the table set if you can.\nClose-up of the louvers rotating. Hold the shot for the whole movement.\nThe screens coming down. Hold until they stop.\nGet the homeowner's OK before filming their home.",
+    "30 seconds",
+  ],
+  [
+    "2026-11",
+    "Three questions we ask in every consultation",
+    "I'm [your name] with Zinga's of [your territory]. Every consultation I do starts with the same three questions.\nOne: when are you in this room, and where does the light bother you?\nTwo: who can see in, and when does that matter?\nThree: what are you tired of doing by hand?\nYour answers decide the fabric, the control, and whether motorization is worth it. The product comes last.",
+    "Talk straight to the camera, phone at eye level.\nFace a window so the light is on your face, not behind you.\nPick a quiet room.\nDo two or three takes and upload them all.",
+    "45 seconds",
+  ],
+  [
+    "2026-11",
+    "Install day in 20 seconds",
+    "No voiceover. These lines go on screen:\nMorning: an empty patio.\nMidday: posts set, louvers going on.\nEvening: shade where they need it.",
+    "Before the crew starts, set your phone on a tripod in a corner of the yard and start a time-lapse.\nGrab three or four short close-ups of the crew working. Ask them first.\nEnd on the homeowner using the space.\nUpload the time-lapse and each close-up as separate files.",
+    "15 to 20 seconds",
+  ],
+  [
+    "2026-11",
+    "Afternoon glare, fixed",
+    "This is four o'clock in a west-facing family room. You can't see the TV, and the floor is fading.\nThese are solar shades. Same view, without the glare.\nBetter light, less glare.",
+    "Film the before and the after at the same time of day, from the same spot.\nTap and hold on the window to lock the exposure so the view doesn't wash out.\nStart on the glare on the TV or floor, then pan to the window.\nUpload the before and after as separate clips.",
+    "20 seconds",
+  ],
+  [
+    "2026-12",
+    "Cool evenings, still outside",
+    "Cool evenings are the best part of the year, until the wind picks up.\nThis patio has clear vinyl enclosures. They roll down when it's breezy and hold the heater's warmth where you're sitting.\nYou keep the view, and you stay out longer.",
+    "Film at dusk.\nWide shot of the patio with the enclosures up, then rolling down.\nClose-up of people at the table or the heater, if the homeowner is happy to be on camera.",
+    "30 seconds",
+  ],
+  [
+    "2026-12",
+    "Why we measure twice",
+    "Every window gets measured twice: once at the consultation, and again before we order.\nWindows aren't square, even in new homes. A quarter inch is the difference between a clean fit and a strip of light down the side.\nSo we check. Then we make it.",
+    "Close-ups of the tape measure on the window frame and the measurement being written down.\nThen say the lines to camera.\nIf you have a finished install with a tight fit, add a close-up of the edge.",
+    "30 seconds",
+  ],
+  [
+    "2026-12",
+    "Our favorite install this year",
+    "My favorite install this year was [the project].\nThe problem was [glare, heat, bugs or privacy].\nHere's what we did: [the products].\nAnd here's what changed: [how they use the space now].",
+    "Pick a project you have good photos or video of.\nFilm yourself telling the story in one take, under a minute.\nUpload the project photos and clips too.",
+    "45 to 60 seconds",
+  ],
+];
+
 export const demoSettings: HubSettings = {
   links: [
     {
@@ -175,5 +229,10 @@ export const demoSettings: HubSettings = {
       message: "New louvered pergola and screen photos from the Vero Beach shoot are in Photos.",
     },
   ],
-  users: [],
+  users: [
+    { email: "demo@zingashome.com", name: "Alex Rivera", location: "Vero Beach, FL", role: "admin" },
+    { email: "owner.nashville@example.com", name: "Sam Carter", location: "Nashville, TN", role: "franchisee" },
+    { email: "owner.omaha@example.com", name: "Jordan Lee", location: "Omaha, NE", role: "franchisee" },
+  ],
+  scripts: parseScripts(SAMPLE_SCRIPT_ROWS),
 };

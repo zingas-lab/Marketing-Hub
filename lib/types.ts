@@ -60,10 +60,36 @@ export interface HubUser {
   role: "admin" | "franchisee";
 }
 
+export interface Script {
+  /** Stable within a month: derived from the title. */
+  id: string;
+  /** "YYYY-MM" */
+  month: string;
+  title: string;
+  /** What to say on camera. Line breaks are kept. */
+  script: string;
+  /** Shot list and filming tips, one per line. */
+  notes: string[];
+  /** e.g. "30 seconds" */
+  length: string;
+  exampleUrl?: string;
+}
+
 export interface HubSettings {
   links: HubLink[];
   announcements: Announcement[];
   users: HubUser[];
+  scripts: Script[];
+}
+
+/** A file a franchisee uploaded for a script. */
+export interface Upload {
+  id: string;
+  name: string;
+  size: number | null;
+  mimeType: string;
+  createdTime: string;
+  uploadedBy?: string;
 }
 
 export interface Viewer {

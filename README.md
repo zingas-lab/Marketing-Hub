@@ -10,6 +10,7 @@ Files live in **Google Drive**. The hub reads a single Drive folder and shows it
 |---|---|
 | **Home** | Search, jump to the Vistaprint and merch stores, see announcements and recently added files |
 | **Library** | Browse the Drive folder by category, preview files, download them |
+| **Social media** | Read this month's video scripts and shot lists, and upload clips under each script |
 | **Search** | Find files by name, product or folder, filtered by type (images, videos, PDFs, design files, documents) |
 | **Brand** | Logo do's and don'ts, logo downloads, colors with copyable HEX/RGB/CMYK, type, voice |
 | **Order & shop** | Every link from the settings sheet: print store, merch store, vendors, design requests |
@@ -87,7 +88,35 @@ Keep internal material (sales call transcripts, CRM exports, reports) out of thi
 |---|---|---|---|
 | owner@gmail.com | Mike Smith | Nashville, TN | franchisee |
 
-Removing someone from this tab locks them out within the cache window.
+Removing someone from this tab locks them out within the cache window. **Location** also decides where a person's social media uploads go, so fill it in for every franchisee, and spell it the same way for everyone at the same location.
+
+**Scripts**: monthly video ideas for the Social media page. One row per script.
+
+| Month | Title | Script | Filming notes | Length | Example link |
+|---|---|---|---|---|---|
+| 2026-11 | Afternoon glare, fixed | What to say, one line per line break | One tip per line | 20 seconds | optional URL |
+
+- **Month** is `YYYY-MM`. The column is formatted as plain text so Sheets doesn't turn it into a date.
+- Line breaks inside a cell (Ctrl+Enter, or ⌘+Enter on a Mac) carry through: each line of the script shows as its own paragraph, and each line of filming notes becomes a bullet.
+- **Don't rename a script after people have uploaded to it.** The title names its upload folder, so a new title starts a new, empty folder. The old uploads stay in Drive.
+
+### Social media uploads
+
+On the Social media page, franchisees see each script for the month next to an upload box. They can pick or drop as many videos and photos as they like per script, up to 10 GB each. Files upload in chunks with a progress bar and pick up where they left off after a dropped connection. They save to Google Drive here:
+
+```
+Franchisee Uploads (Shared Drive)/
+  Omaha, NE/                      shared with everyone at that location
+    2026-11 November/
+      Afternoon glare, fixed/     one folder per script
+        IMG_4021.MOV
+```
+
+- Folders are created automatically. Every morning (see `vercel.json`) the hub makes this month's folder and a folder per script for every location on the Users tab, and it fills any gaps whenever someone opens the page.
+- Each location folder is shared with that location's people (edit access, no email), so it appears under **Shared with me** in their Google Drive. They can add files from the Drive app too, and those show up in the hub. Set `HUB_SHARE_UPLOAD_FOLDERS=0` to turn sharing off.
+- Franchisees can remove their own uploads, which moves them to the Drive trash.
+- Admins get a location picker to see, or upload for, any location.
+- The uploads go into a **Shared Drive**, not a regular folder, because the hub's service account has no Drive storage of its own and can't own files in someone's My Drive. Files in a Shared Drive belong to Zinga's.
 
 ## Setup
 
@@ -111,7 +140,14 @@ You need a Google Cloud project (free), and somewhere to host the app. These ste
 
 A franchisee without a Google account can make one for their existing email at [accounts.google.com/signup](https://accounts.google.com/signup) ("Use my current email address instead").
 
-### 3. Deploy to Vercel
+### 3. Shared Drive for social media uploads
+
+1. In Google Drive: **Shared drives → New**, name it `Franchisee Uploads`.
+2. **Manage members**: add the service account email as **Manager**. Manager is needed so the hub can share each location's folder with that location.
+3. If franchisees sign in with non-zingashome Google accounts: open the Shared Drive's settings and allow sharing with people outside Zinga's. Your Workspace admin settings must allow it as well.
+4. Copy the Shared Drive's ID from its URL: `drive.google.com/drive/folders/THIS_PART`.
+
+### 4. Deploy to Vercel
 
 1. At [vercel.com](https://vercel.com), **Add New → Project**, import `zingas-lab/marketing-hub`. The defaults are right for Next.js.
 2. Add the environment variables from `.env.example`:
@@ -126,6 +162,8 @@ A franchisee without a Google account can make one for their existing email at [
 | `HUB_ALLOWED_DOMAINS` | `zingashome.com` |
 | `HUB_ADMIN_EMAILS` | `braden@zingashome.com` |
 | `HUB_SUPPORT_EMAIL` | Where franchisees send questions |
+| `HUB_UPLOADS_FOLDER_ID` | The Shared Drive's ID from step 3 |
+| `CRON_SECRET` | Any long random string. Vercel sends it with the daily folder job so nobody else can trigger it |
 
 3. Deploy. To use your own address, like `hub.zingashome.com`, add it under **Settings → Domains**, then update the redirect URI in step 2.
 
@@ -137,6 +175,9 @@ app/login/            sign-in page
 app/api/files/[id]/   thumbnail and download streaming from Drive
 lib/drive.ts          reads the Drive folder tree into a cached index; search
 lib/settings.ts       reads the settings sheet
+lib/uploads.ts        social media upload folders, resumable uploads to Drive
+app/(hub)/social/     scripts and upload page
+components/UploadPanel.tsx   multi-file chunked uploader
 lib/session.ts        who's signed in, and whether they're still allowed
 lib/demo.ts           sample content for local previews
 auth.ts               Google sign-in (Auth.js)

@@ -2,15 +2,36 @@ import "server-only";
 import { config, isDemo } from "./config";
 import { demoSettings } from "./demo";
 import { googleJson } from "./google";
-import type { Announcement, HubLink, HubSettings, HubUser } from "./types";
+import { parseScripts } from "./scripts-parse";
+import type { Announcement, HubLink, HubSettings, HubUser, Script } from "./types";
 
-// The settings sheet has three tabs. Row 1 of each is a header row and is skipped.
+// The settings sheet's tabs. Row 1 of each is a header row and is skipped.
 //   Links:          Section | Title | Description | URL | Button label
 //   Announcements:  Date | Title | Message | Link (optional)
 //   Users:          Email | Name | Location | Role (admin or franchisee)
+//   Scripts:        Month | Title | Script | Filming notes | Length | Example link (optional)
 const RANGES = ["Links!A2:E", "Announcements!A2:D", "Users!A2:D"];
+const SCRIPTS_RANGE = "Scripts!A2:F";
 
 type Rows = string[][];
+
+const clean = (rows: Rows | undefined) => (rows ?? []).map((row) => row.map((c) => (c ?? "").trim()));
+
+/** The Scripts tab is read on its own so a sheet without one still loads everything else. */
+async function loadScripts(): Promise<Script[]> {
+  let rows: Rows;
+  try {
+    const data = await googleJson<{ values?: Rows }>(
+      `https://sheets.googleapis.com/v4/spreadsheets/${config.settingsSheetId}/values/${encodeURIComponent(SCRIPTS_RANGE)}`,
+    );
+    rows = clean(data.values);
+  } catch (error) {
+    console.warn("Couldn't read the Scripts tab of the settings sheet:", error);
+    return [];
+  }
+  return parseScripts(rows);
+}
+
 
 let cached: { at: number; settings: HubSettings } | null = null;
 
@@ -20,7 +41,7 @@ async function load(): Promise<HubSettings> {
   const data = await googleJson<{ valueRanges: { values?: Rows }[] }>(
     `https://sheets.googleapis.com/v4/spreadsheets/${config.settingsSheetId}/values:batchGet?${params}`,
   );
-  const [links, announcements, users] = data.valueRanges.map((r) => (r.values ?? []).map((row) => row.map((c) => (c ?? "").trim())));
+  const [links, announcements, users] = data.valueRanges.map((r) => clean(r.values));
 
   return {
     links: links
@@ -44,12 +65,13 @@ async function load(): Promise<HubSettings> {
         location: location ?? "",
         role: role?.toLowerCase() === "admin" ? "admin" : "franchisee",
       })),
+    scripts: await loadScripts(),
   };
 }
 
 export async function getSettings(): Promise<HubSettings> {
   if (isDemo) return demoSettings;
-  if (!config.settingsSheetId) return { links: [], announcements: [], users: [] };
+  if (!config.settingsSheetId) return { links: [], announcements: [], users: [], scripts: [] };
   if (cached && Date.now() - cached.at < config.cacheSeconds * 1000) return cached.settings;
   const settings = await load();
   cached = { at: Date.now(), settings };

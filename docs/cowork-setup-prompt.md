@@ -22,6 +22,8 @@ Deploy Zinga's Marketing Hub, a Next.js app, so franchise owners can sign in wit
 2. Open it → Keys → Add key → Create new key → JSON. A .json file downloads. Keep it; you'll paste its contents into Vercel in step 4.
 3. Copy the service account's email (it ends in `iam.gserviceaccount.com`).
 4. Open the Marketing Hub Drive folder link above → Share → add that email as **Viewer** → uncheck "Notify people" → Share. If Drive warns the address is outside the organization, allow it.
+5. In Google Drive, create a Shared Drive: Shared drives → New → name it `Franchisee Uploads`. Manage members → add the service account email as **Manager** (no notification). In the Shared Drive's settings, allow sharing with people outside Zinga's, so franchisees on Gmail accounts can see their folders. If the setting is greyed out, tell me: it needs a Workspace admin change.
+6. Copy the Shared Drive's ID from its URL (the part after `/folders/`). Call it UPLOADS_ID below.
 
 **3. Vercel project** (vercel.com)
 1. Sign in with GitHub. If there's no Vercel account, create a free Hobby one with GitHub.
@@ -47,6 +49,8 @@ Deploy Zinga's Marketing Hub, a Next.js app, so franchise owners can sign in wit
 | `AUTH_GOOGLE_SECRET` | Client secret from step 4 |
 | `HUB_ALLOWED_DOMAINS` | `zingashome.com` |
 | `HUB_ADMIN_EMAILS` | `braden@zingashome.com` |
+| `HUB_UPLOADS_FOLDER_ID` | UPLOADS_ID from step 2 |
+| `CRON_SECRET` | Another random 32-character secret, different from `AUTH_SECRET` |
 
 Then Deployments → latest → Redeploy.
 
@@ -54,6 +58,7 @@ Then Deployments → latest → Redeploy.
 1. Open `https://DOMAIN`, click "Sign in with Google", and sign in as braden@zingashome.com.
 2. The home page should show the Library with Logos & Brand, Photos, Video, Print, Social Media and Templates. Open Logos & Brand: the logo files should show previews and download.
 3. The "Open the print store" and "Open the merch store" buttons should go to zingas.ourproshop.com and zingas.istoremerch.com.
+4. Open **Social media**. The November scripts should show, each with an upload box. Upload one short test video to any script and check it appears in the list, and in the Franchisee Uploads Shared Drive under the location's folder. Then remove it.
 
 **7. Clean up and report**
 - Delete the downloaded .json key file from Downloads. It's a password for the Drive folder, and Vercel now has its own copy.

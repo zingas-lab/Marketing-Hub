@@ -16,6 +16,16 @@ export const config = {
   cacheSeconds: Number(process.env.HUB_CACHE_SECONDS ?? 300),
   /** Shown in the footer as the place to send questions. */
   supportEmail: process.env.HUB_SUPPORT_EMAIL ?? "",
+  /**
+   * Where franchisee video uploads go: a Shared Drive (or a folder inside one) where the
+   * service account is a Manager. It has to be a Shared Drive because service accounts
+   * have no storage of their own and can't own files in someone's My Drive.
+   */
+  uploadsFolderId: process.env.HUB_UPLOADS_FOLDER_ID ?? "",
+  /** Share each location's upload folder with that location's people, so it shows up in their Google Drive. */
+  shareUploadFolders: process.env.HUB_SHARE_UPLOAD_FOLDERS !== "0",
+  /** Vercel sends this with scheduled (cron) requests. */
+  cronSecret: process.env.CRON_SECRET ?? "",
 };
 
 /**
